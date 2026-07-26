@@ -1,0 +1,45 @@
+name: Release Theme Plugins
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "themes/**"
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    outputs:
+      themes: ${{ steps.list.outputs.themes }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+      - run: bun run scripts/validate.mjs
+      - id: list
+        run: echo "themes=$(ls themes | jq -R -s -c 'split("\n")[:-1]')" >> "$GITHUB_OUTPUT"
+
+  release:
+    needs: validate
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        theme: ${{ fromJson(needs.validate.outputs.themes) }}
+    steps:
+      - uses: actions/checkout@v4
+      # One stable release per theme id, tag reused across pushes - keeps the download URL
+      # pasted into the app's install-by-URL field constant across theme updates, instead of
+      # forcing a manual reinstall every time a theme's cssVariables change.
+      - name: Publish ${{ matrix.theme }}
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ matrix.theme }}
+          name: ${{ matrix.theme }}
+          files: themes/${{ matrix.theme }}/manifest.json
+          body: Auto-published by CI from themes/${{ matrix.theme }}/manifest.json.
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

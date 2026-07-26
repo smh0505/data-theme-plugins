@@ -1,0 +1,18 @@
+{
+  "id": "sakura-theme",
+  "name": "Sakura",
+  "version": "1.0.0",
+  "cssVariables": {
+    "--color-base": "#fff5f7",
+    "--color-mantle": "#ffe4ec",
+    "--color-crust": "#ffd1dc",
+    "--color-text": "#4a2c33",
+    "--color-subtext": "#7a4a54",
+    "--color-surface0": "#ffc2d1",
+    "--color-surface1": "#ffaec1",
+    "--color-accent": "#ff6f91",
+    "--color-accent-alt": "#d65780",
+    "--color-danger": "#d1495b",
+    "--color-on-accent": "#ffffff"
+  }
+}
