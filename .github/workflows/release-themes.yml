@@ -16,7 +16,7 @@ jobs:
     outputs:
       themes: ${{ steps.list.outputs.themes }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - uses: oven-sh/setup-bun@v2
       - run: bun run scripts/validate.mjs
       - id: list
@@ -26,20 +26,41 @@ jobs:
     needs: validate
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        theme: ${{ fromJson(needs.validate.outputs.themes) }}
     steps:
-      - uses: actions/checkout@v4
-      # One stable release per theme id, tag reused across pushes - keeps the download URL
-      # pasted into the app's install-by-URL field constant across theme updates, instead of
-      # forcing a manual reinstall every time a theme's cssVariables change.
-      - name: Publish ${{ matrix.theme }}
-        uses: softprops/action-gh-release@v2
+      - uses: actions/checkout@v6
+
+      # Every theme's manifest is literally named manifest.json, so GitHub Release assets
+      # (which must have unique filenames within one release) need each one renamed to its
+      # theme id before upload.
+      - name: Stage renamed manifests
+        run: |
+          mkdir -p dist
+          echo '${{ needs.validate.outputs.themes }}' | jq -r '.[]' | while read -r theme; do
+            cp "themes/$theme/manifest.json" "dist/$theme.json"
+          done
+
+      - name: Build release notes
+        id: notes
+        run: |
+          {
+            echo "body<<RELEASE_BODY_EOF"
+            echo "Auto-published by CI. Themes in this release:"
+            echo
+            echo '${{ needs.validate.outputs.themes }}' | jq -r '.[]' | while read -r theme; do
+              echo "- \`$theme\`"
+            done
+            echo "RELEASE_BODY_EOF"
+          } >> "$GITHUB_OUTPUT"
+
+      # One stable release for all themes, tag reused across pushes - keeps each theme's
+      # download URL pasted into the app's install-by-URL field constant across updates,
+      # instead of forcing a manual reinstall every time a theme's cssVariables change.
+      - name: Publish
+        uses: softprops/action-gh-release@v3
         with:
-          tag_name: ${{ matrix.theme }}
-          name: ${{ matrix.theme }}
-          files: themes/${{ matrix.theme }}/manifest.json
-          body: Auto-published by CI from themes/${{ matrix.theme }}/manifest.json.
+          tag_name: themes
+          name: Themes
+          files: dist/*.json
+          body: ${{ steps.notes.outputs.body }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

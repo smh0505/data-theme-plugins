@@ -35,19 +35,19 @@ Each theme lives at `themes/<id>/manifest.json`:
 
 1. `mkdir themes/<your-theme-id>` and add a `manifest.json` following the shape above.
 2. `bun run validate` locally to check it.
-3. Open a PR. Once merged to `main`, CI validates every theme and publishes/updates a GitHub
-   Release per theme, tagged with the theme's `id`.
+3. Open a PR. Once merged to `main`, CI validates every theme and publishes/updates the single
+   shared `themes` release with all manifests attached.
 
 ## Installing a published theme
 
 In Concourse's Theme settings tab, paste the release asset URL:
 
 ```
-https://github.com/<owner>/<repo>/releases/download/<theme-id>/manifest.json
+https://github.com/smh0505/data-theme-plugins/releases/download/themes/<theme-id>.json
 ```
 
 The app downloads and caches it locally; re-running install after a theme update re-fetches the
-same stable URL (the release tag is reused per theme id, not versioned per release).
+same stable URL (the `themes` release tag is reused across pushes, not versioned per release).
 
 ## CI
 
@@ -55,5 +55,6 @@ same stable URL (the release tag is reused per theme id, not versioned per relea
 
 - Validates every `themes/*/manifest.json` (`scripts/validate.mjs`) on every push touching
   `themes/**`.
-- On push to `main`, publishes/updates one GitHub Release per theme with its `manifest.json`
-  attached as a release asset.
+- On push to `main`, publishes/updates a single GitHub Release (tag `themes`) with every
+  theme's manifest attached as `<theme-id>.json` (renamed from `manifest.json`, since release
+  assets need unique filenames within a release).
