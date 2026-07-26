@@ -1,7 +1,8 @@
 {
   "id": "midnight-neon-theme",
   "name": "Midnight Neon",
-  "version": "1.0.0",
+  "version": "1.0.1",
+  "kind": "theme",
   "cssVariables": {
     "--color-base": "#0d1117",
     "--color-mantle": "#161b22",

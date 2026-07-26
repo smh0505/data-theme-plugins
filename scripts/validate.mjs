@@ -32,6 +32,9 @@ for (const dir of readdirSync(THEMES_DIR)) {
   if (typeof manifest.version !== "string" || !manifest.version.trim()) {
     fail(`${dir}: missing version`);
   }
+  if (manifest.kind !== "theme") {
+    fail(`${dir}: kind must be "theme" (matches source plugin manifests' own kind field, so Concourse's install-by-URL flow can tell plugin kinds apart)`);
+  }
 
   const vars = manifest.cssVariables;
   if (typeof vars !== "object" || vars === null || Array.isArray(vars) || Object.keys(vars).length === 0) {

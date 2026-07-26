@@ -13,7 +13,8 @@ Each theme lives at `themes/<id>/manifest.json`:
 {
   "id": "sakura-theme",
   "name": "Sakura",
-  "version": "1.0.0",
+  "version": "1.0.1",
+  "kind": "theme",
   "cssVariables": {
     "--color-base": "#fff5f7",
     "--color-accent": "#ff6f91"
@@ -22,6 +23,11 @@ Each theme lives at `themes/<id>/manifest.json`:
 ```
 
 - `id` must match the folder name exactly, lowercase kebab-case.
+- `kind` must be the literal string `"theme"` - shared with source plugin manifests'
+  `{id, name, version, kind, entry}` shape, so Concourse's universal "Add Plugin" UI can tell
+  a pasted URL's plugin kind apart from a single field instead of guessing from the presence
+  of `cssVariables`. (Themes have no `entry` - `cssVariables` is the whole plugin, there's no
+  code to load.)
 - `cssVariables` keys should be a subset of the variables Concourse's default theme
   defines (`--color-base`, `--color-mantle`, `--color-crust`, `--color-text`, `--color-subtext`,
   `--color-surface0`, `--color-surface1`, `--color-accent`, `--color-accent-alt`,
@@ -30,6 +36,10 @@ Each theme lives at `themes/<id>/manifest.json`:
 - `version` is plain SemVer: patch for palette tweaks, minor for adding new `cssVariables`
   keys, major for removing/renaming keys a theme previously relied on. Full convention:
   `.claude/CLAUDE.md` (Plugin Versioning) in the main `concourse` repo.
+
+Themes published before `kind` existed still install fine - Concourse's installer defaults a
+missing `kind` to `"theme"` when it's absent and `cssVariables` is present, for backward
+compatibility with already-published releases.
 
 ## Adding a theme
 
