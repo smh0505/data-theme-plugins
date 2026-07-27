@@ -35,7 +35,7 @@ Each theme lives at `themes/<id>/manifest.json`:
   back to the app's own default.
 - `version` is plain SemVer: patch for palette tweaks, minor for adding new `cssVariables`
   keys, major for removing/renaming keys a theme previously relied on. Full convention:
-  `.claude/CLAUDE.md` (Plugin Versioning) in the main `concourse` repo.
+  [`.claude/CLAUDE.md`](https://github.com/smh0505/Concourse/blob/main/.claude/CLAUDE.md) (Plugin Versioning) in the main [Concourse](https://github.com/smh0505/Concourse) repo.
 
 Themes published before `kind` existed still install fine - Concourse's installer defaults a
 missing `kind` to `"theme"` when it's absent and `cssVariables` is present, for backward
@@ -50,11 +50,17 @@ compatibility with already-published releases.
 
 ## Installing a published theme
 
-In Concourse's Theme settings tab, paste the release asset URL:
+In Concourse's Theme settings tab (or the universal Add Plugin button), paste the release
+asset URL:
 
 ```
 https://github.com/smh0505/data-theme-plugins/releases/download/themes/<theme-id>.json
 ```
+
+Currently published themes:
+
+- Midnight Neon: `https://github.com/smh0505/data-theme-plugins/releases/download/themes/midnight-neon-theme.json`
+- Sakura: `https://github.com/smh0505/data-theme-plugins/releases/download/themes/sakura-theme.json`
 
 The app downloads and caches it locally; re-running install after a theme update re-fetches the
 same stable URL (the `themes` release tag is reused across pushes, not versioned per release).

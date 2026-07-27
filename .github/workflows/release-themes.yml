@@ -44,10 +44,11 @@ jobs:
         run: |
           {
             echo "body<<RELEASE_BODY_EOF"
-            echo "Auto-published by CI. Themes in this release:"
+            echo "Auto-published by CI. Paste a theme's URL into Concourse's Settings ->"
+            echo "Theme tab (or the universal Add Plugin button) to install it:"
             echo
             echo '${{ needs.validate.outputs.themes }}' | jq -r '.[]' | while read -r theme; do
-              echo "- \`$theme\`"
+              echo "- \`$theme\`: https://github.com/smh0505/data-theme-plugins/releases/download/themes/$theme.json"
             done
             echo "RELEASE_BODY_EOF"
           } >> "$GITHUB_OUTPUT"
@@ -64,3 +65,16 @@ jobs:
           body: ${{ steps.notes.outputs.body }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Write job summary
+        run: |
+          {
+            echo "### Published themes"
+            echo
+            echo "Paste a theme's URL into Concourse's Settings -> Theme tab (or the universal"
+            echo "Add Plugin button) to install it:"
+            echo
+            echo '${{ needs.validate.outputs.themes }}' | jq -r '.[]' | while read -r theme; do
+              echo "- \`$theme\`: https://github.com/smh0505/data-theme-plugins/releases/download/themes/$theme.json"
+            done
+          } >> "$GITHUB_STEP_SUMMARY"
