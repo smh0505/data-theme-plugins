@@ -46,6 +46,37 @@ for (const dir of readdirSync(THEMES_DIR)) {
     }
   }
 
+  // fontFaces is functional (Concourse strictly validates every field before trusting it -
+  // this is just a basic shape sanity check, not a substitute for that). url must be a
+  // same-repo, commit-pinned raw.githubusercontent.com link - never a third-party CDN.
+  if (manifest.fontFaces !== undefined) {
+    if (!Array.isArray(manifest.fontFaces)) {
+      fail(`${dir}: fontFaces must be an array`);
+    } else {
+      for (const face of manifest.fontFaces) {
+        if (typeof face?.family !== "string" || typeof face?.url !== "string") {
+          fail(`${dir}: each fontFaces entry needs a string family and url`);
+        } else if (!face.url.startsWith("https://raw.githubusercontent.com/smh0505/data-theme-plugins/")) {
+          fail(`${dir}: fontFaces["${face.family}"].url must be a commit-pinned raw.githubusercontent.com link into this repo, not a third-party CDN`);
+        }
+      }
+    }
+  }
+
+  // fonts is pure attribution metadata (crediting the original font author) - not consumed by
+  // Concourse at all, so this is just a basic shape check, not a security gate.
+  if (manifest.fonts !== undefined) {
+    if (!Array.isArray(manifest.fonts)) {
+      fail(`${dir}: fonts must be an array`);
+    } else {
+      for (const font of manifest.fonts) {
+        if (typeof font?.name !== "string" || typeof font?.author !== "string") {
+          fail(`${dir}: each fonts entry needs a string name and author`);
+        }
+      }
+    }
+  }
+
   if (ok === before) console.log(`ok ${dir}`);
 }
 

@@ -36,6 +36,18 @@ Each theme lives at `themes/<id>/manifest.json`:
 - `version` is plain SemVer: patch for palette tweaks, minor for adding new `cssVariables`
   keys, major for removing/renaming keys a theme previously relied on. Full convention:
   [`.claude/CLAUDE.md`](https://github.com/smh0505/Concourse/blob/main/.claude/CLAUDE.md) (Plugin Versioning) in the main [Concourse](https://github.com/smh0505/Concourse) repo.
+- `cardVisual` (optional, Milestone 17) - a closed-vocabulary JSON AST overriding GameCard's
+  cover-visual region (image-or-placeholder). Still just data, no code - validated by
+  Concourse's `validateCardVisualAst` before ever being trusted. See `brick-block-data-theme`
+  for a real example.
+- `fontFaces` (optional) - real fonts to load via `@font-face`, since `cssVariables` can only
+  ever *select* a font by name, never load one. Each entry is `{family, url, weight?, style?}`;
+  `url` must be a same-repo, commit-pinned `raw.githubusercontent.com` link (never a third-party
+  CDN - unpinnable, unreviewed) and gets strictly validated by Concourse before any CSS text is
+  built from it.
+- `fonts` (optional) - pure attribution metadata, not consumed by Concourse at all, distinct
+  from the functional `fontFaces` above. `{name, author, url, license}` per font actually used,
+  crediting the original creator. See `FONTS.md` for the full credits list.
 
 Themes published before `kind` existed still install fine - Concourse's installer defaults a
 missing `kind` to `"theme"` when it's absent and `cssVariables` is present, for backward

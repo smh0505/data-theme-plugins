@@ -19,7 +19,14 @@
     "--button-border-width": "2px",
     "--balloon-border-width": "2px",
     "--balloon-radius": "0",
-    "--balloon-font-family": "'Press Start 2P', monospace"
+    "--balloon-background": "var(--color-mantle)",
+    "--balloon-font-family": "'Fusion Pixel 12px Prop ko', 'Press Start 2P', Inter, Avenir, Helvetica, Arial, sans-serif",
+    "--card-border-width": "3px",
+    "--card-radius": "0",
+    "--cover-placeholder-background": "repeating-linear-gradient(45deg, #c84c0c, #c84c0c 10px, #7c2c00 10px, #7c2c00 12px)",
+    "--cover-placeholder-color": "#fce303",
+    "--cover-placeholder-text-shadow": "2px 2px 0 #7c2c00",
+    "--cover-placeholder-font-size": "2.5rem"
   },
   "cardVisual": {
     "type": "if",
@@ -36,5 +43,13 @@
       "class": "cover-placeholder",
       "children": [{ "type": "text", "content": "★" }]
     }
-  }
+  },
+  "fonts": [
+    {
+      "name": "Fusion Pixel Font (12px Proportional Korean)",
+      "author": "TakWolf",
+      "url": "https://github.com/TakWolf/fusion-pixel-font",
+      "license": "OFL-1.1"
+    }
+  ]
 }
