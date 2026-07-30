@@ -1,7 +1,7 @@
 {
   "id": "brick-block-data-theme",
   "name": "Brick Block (Data)",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "kind": "theme",
   "cssVariables": {
     "--color-base": "#5c94fc",
@@ -20,5 +20,21 @@
     "--balloon-border-width": "2px",
     "--balloon-radius": "0",
     "--balloon-font-family": "'Press Start 2P', monospace"
+  },
+  "cardVisual": {
+    "type": "if",
+    "test": { "field": "cover_art_url" },
+    "then": {
+      "type": "image",
+      "class": "cover",
+      "src": { "field": "cover_art_url" },
+      "alt": { "field": "title" }
+    },
+    "else": {
+      "type": "element",
+      "tag": "div",
+      "class": "cover-placeholder",
+      "children": [{ "type": "text", "content": "★" }]
+    }
   }
 }
