@@ -9,6 +9,12 @@ on:
 
 permissions:
   contents: write
+  # Matches the other 7 plugin repos' Milestone 14 signing setup - id-token lets the job
+  # request a short-lived Sigstore signing cert bound to this exact workflow run's OIDC
+  # identity; attestations lets it publish the resulting provenance attestation via GitHub's
+  # API. Free for public repos.
+  id-token: write
+  attestations: write
 
 jobs:
   validate:
@@ -38,6 +44,17 @@ jobs:
           echo '${{ needs.validate.outputs.themes }}' | jq -r '.[]' | while read -r theme; do
             cp "themes/$theme/manifest.json" "dist/$theme.json"
           done
+
+      # Milestone 14/17 (Concourse) - signs every theme's manifest with a Sigstore attestation
+      # binding it to this exact workflow run (repo + commit + workflow file), the same
+      # mechanism the other 7 plugin repos use for their .wasm binaries. A data-only theme has
+      # no binary - the manifest itself is the whole artifact, so it's what gets attested.
+      # subject-path accepts a glob, producing one attestation per matching file in this single
+      # step rather than needing a separate step per theme.
+      - name: Attest build provenance
+        uses: actions/attest-build-provenance@v2
+        with:
+          subject-path: "dist/*.json"
 
       - name: Build release notes
         id: notes
