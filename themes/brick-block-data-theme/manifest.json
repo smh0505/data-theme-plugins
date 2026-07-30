@@ -1,7 +1,7 @@
 {
   "id": "brick-block-data-theme",
   "name": "Brick Block (Data)",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "kind": "theme",
   "cssVariables": {
     "--color-base": "#5c94fc",
@@ -44,6 +44,12 @@
       "children": [{ "type": "text", "content": "★" }]
     }
   },
+  "fontFaces": [
+    {
+      "family": "Fusion Pixel 12px Prop ko",
+      "url": "https://raw.githubusercontent.com/smh0505/data-theme-plugins/204a142ffe3a113f888711b2ca023679f5b0c99d/themes/brick-block-data-theme/fusion-pixel-12px-proportional-ko.otf.woff2"
+    }
+  ],
   "fonts": [
     {
       "name": "Fusion Pixel Font (12px Proportional Korean)",
