@@ -1,7 +1,7 @@
 {
   "id": "sakura-theme",
   "name": "Sakura",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "kind": "theme",
   "cssVariables": {
     "--color-base": "#fff5f7",
