@@ -33,7 +33,11 @@ jobs:
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     steps:
+      # fetch-depth: 0 (full history) - the "changed themes" step below diffs
+      # github.event.before against github.sha, which needs both commits present locally.
       - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
 
       # Every theme's manifest is literally named manifest.json, so GitHub Release assets
       # (which must have unique filenames within one release) need each one renamed to its
@@ -95,3 +99,38 @@ jobs:
               echo "- \`$theme\`: https://github.com/smh0505/data-theme-plugins/releases/download/themes/$theme.json"
             done
           } >> "$GITHUB_STEP_SUMMARY"
+
+      # Only meaningful for push events - github.event.before doesn't exist for a manual
+      # workflow_dispatch run, and a manual re-publish isn't "new content" worth dispatching
+      # over anyway. Every push here re-validates/republishes *every* theme regardless of which
+      # one actually changed, so diffing before..head is what tells changed themes apart from
+      # ones just carried along - dispatching for all of them every time would open a no-op PR
+      # for every untouched theme alongside the one real change.
+      - name: Determine changed themes
+        if: github.event_name == 'push'
+        id: changed
+        run: |
+          changed=$(git diff --name-only "${{ github.event.before }}" "${{ github.sha }}" \
+              -- 'themes/*/manifest.json' \
+            | sed -E 's#themes/([^/]+)/manifest\.json#\1#' \
+            | sort -u \
+            | jq -R -s -c 'split("\n")[:-1]')
+          echo "themes=$changed" >> "$GITHUB_OUTPUT"
+
+      # Notifies concourse-plugin-registry per changed theme, same mechanism the other 7 plugin
+      # repos use inline in their own publish.yml (a separate release:published-triggered
+      # workflow wouldn't fire - see those repos' own comment on this). ref is a commit SHA
+      # here, not a version tag - this repo has no per-theme version tags, see bump-entry.sh in
+      # concourse-plugin-registry for how that's handled on the receiving end.
+      - name: Notify concourse-plugin-registry for each changed theme
+        if: github.event_name == 'push'
+        env:
+          GH_TOKEN: ${{ secrets.REGISTRY_DISPATCH_TOKEN }}
+        run: |
+          echo '${{ steps.changed.outputs.themes }}' | jq -r '.[]' | while read -r theme; do
+            [ -z "$theme" ] && continue
+            gh api repos/smh0505/concourse-plugin-registry/dispatches \
+              -f event_type=plugin-release \
+              -f "client_payload[id]=$theme" \
+              -f "client_payload[ref]=${{ github.sha }}"
+          done
