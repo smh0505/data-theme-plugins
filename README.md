@@ -61,6 +61,10 @@ Currently published themes:
 
 - Midnight Neon: `https://github.com/smh0505/data-theme-plugins/releases/download/themes/midnight-neon-theme.json`
 - Sakura: `https://github.com/smh0505/data-theme-plugins/releases/download/themes/sakura-theme.json`
+- Brick Block (Data): `https://github.com/smh0505/data-theme-plugins/releases/download/themes/brick-block-data-theme.json`
+  - A data-only reduction of Concourse's built-in, `slots`-based Brick Block theme (see that
+    project's Milestone 17) - see its own devlog for exactly what's preserved vs. lost in the
+    conversion.
 
 The app downloads and caches it locally; re-running install after a theme update re-fetches the
 same stable URL (the `themes` release tag is reused across pushes, not versioned per release).

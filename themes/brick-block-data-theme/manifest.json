@@ -1,0 +1,24 @@
+{
+  "id": "brick-block-data-theme",
+  "name": "Brick Block (Data)",
+  "version": "1.0.0",
+  "kind": "theme",
+  "cssVariables": {
+    "--color-base": "#5c94fc",
+    "--color-mantle": "#a4e4fc",
+    "--color-crust": "#0058f8",
+    "--color-text": "#1a1a2e",
+    "--color-subtext": "#3a3a5e",
+    "--color-surface0": "#c84c0c",
+    "--color-surface1": "#7c2c00",
+    "--color-accent": "#e52521",
+    "--color-accent-alt": "#43b047",
+    "--color-danger": "#b71c1c",
+    "--color-button-text": "#ffffff",
+    "--color-on-accent": "#ffffff",
+    "--button-border-width": "2px",
+    "--balloon-border-width": "2px",
+    "--balloon-radius": "0",
+    "--balloon-font-family": "'Press Start 2P', monospace"
+  }
+}
