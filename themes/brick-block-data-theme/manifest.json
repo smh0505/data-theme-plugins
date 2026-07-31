@@ -1,7 +1,7 @@
 {
   "id": "brick-block-data-theme",
   "name": "Brick Block (Data)",
-  "version": "1.2.0",
+  "version": "1.2.3",
   "kind": "theme",
   "cssVariables": {
     "--color-base": "#5c94fc",
@@ -16,7 +16,9 @@
     "--color-danger": "#b71c1c",
     "--color-button-text": "#ffffff",
     "--color-on-accent": "#ffffff",
-    "--button-border-width": "2px",
+    "--button-border-width": "3px",
+    "--button-border-color": "#7c2c00",
+    "--button-radius": "0",
     "--balloon-border-width": "2px",
     "--balloon-radius": "0",
     "--balloon-background": "var(--color-mantle)",
