@@ -1,13 +1,14 @@
 {
   "id": "brick-block-data-theme",
   "name": "Brick Block (Data)",
-  "version": "1.5.0",
+  "version": "1.6.0",
   "kind": "theme",
   "cssVariables": {
     "--font-family": "'Fusion Pixel 12px Prop ko', 'Press Start 2P', Inter, Avenir, Helvetica, Arial, sans-serif",
     "--color-base": "#5c94fc",
     "--color-mantle": "#a4e4fc",
     "--color-crust": "#0058f8",
+    "--color-tint": "var(--color-mantle)",
     "--color-text": "#1a1a2e",
     "--color-text-reverse": "#ffffff",
     "--color-subtext": "#3a3a5e",
